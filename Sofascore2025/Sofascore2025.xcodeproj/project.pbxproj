@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C30D7EE72D82064E00B8E740 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C30D7EE62D82064E00B8E740 /* SnapKit */; };
+		C30D7EE92D82064E00B8E740 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = C30D7EE82D82064E00B8E740 /* SnapKit-Dynamic */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C3F602DE2D791423009E9FA6 /* Sofascore2025.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sofascore2025.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C30D7EE72D82064E00B8E740 /* SnapKit in Frameworks */,
+				C30D7EE92D82064E00B8E740 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = Sofascore2025;
 			packageProductDependencies = (
+				C30D7EE62D82064E00B8E740 /* SnapKit */,
+				C30D7EE82D82064E00B8E740 /* SnapKit-Dynamic */,
 			);
 			productName = Sofascore2025;
 			productReference = C3F602DE2D791423009E9FA6 /* Sofascore2025.app */;
@@ -107,6 +116,9 @@
 			);
 			mainGroup = C3F602D52D791423009E9FA6;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C30D7EE52D82064E00B8E740 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C3F602DF2D791423009E9FA6 /* Products */;
 			projectDirPath = "";
@@ -335,6 +347,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C30D7EE52D82064E00B8E740 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C30D7EE62D82064E00B8E740 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C30D7EE52D82064E00B8E740 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		C30D7EE82D82064E00B8E740 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C30D7EE52D82064E00B8E740 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C3F602D62D791423009E9FA6 /* Project object */;
 }
