@@ -2,68 +2,62 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    private let tableView = UITableView()
+class ViewController: UIViewController {
     private let dataSource = Homework2DataSource()
     private var events: [Event] = []
-    private var leagueViewController: LeagueViewController?
+    private var leagueView: LeagueView?
+    private let stackView = UIStackView()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
 
         events = dataSource.laLigaEvents()
-        setupLeagueViewController()
-        setupTableView()
+        setupLeagueView()
+        setupStackView()
+        populateEvents()
     }
 
-    private func setupLeagueViewController() {
-            let league = dataSource.laLigaLeague
-        leagueViewController = LeagueViewController(league: league())
+    private func setupLeagueView() {
+        let league = dataSource.laLigaLeague
+        leagueView = LeagueView(league: league())
 
-            guard let leagueVC = leagueViewController else { return }
-            addChild(leagueVC)
-            view.addSubview(leagueVC.view)
+        guard let leagueView = leagueView else { return }
+        view.addSubview(leagueView)
 
-            leagueVC.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                leagueVC.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                leagueVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                leagueVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                leagueVC.view.heightAnchor.constraint(equalToConstant: 56)
-            ])
-            leagueVC.didMove(toParent: self)
+        leagueView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
         }
-
-    private func setupTableView() {
-        tableView.register(EventTableViewCell.self, forCellReuseIdentifier: EventTableViewCell.identifier)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = 56
-
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        guard let leagueVC = leagueViewController else { return }
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: leagueVC.view.bottomAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
-    }
+    private func setupStackView() {
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: EventTableViewCell.identifier, for: indexPath) as? EventTableViewCell else {
-            return UITableViewCell()
+        view.addSubview(stackView)
+
+        stackView.snp.makeConstraints { make in
+            guard let leagueView = leagueView else { return }
+            make.top.equalTo(leagueView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+    }
 
-        let event = events[indexPath.row]
-        cell.configure(with: event) 
+    private func populateEvents() {
+        for event in events {
+            let eventView = EventView(event: event)
+            stackView.addArrangedSubview(eventView)
 
-        return cell
+            eventView.snp.makeConstraints { make in
+                make.height.equalTo(56)
+            }
+        }
     }
 }
