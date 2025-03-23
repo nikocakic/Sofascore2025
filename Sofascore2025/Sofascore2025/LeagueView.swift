@@ -41,9 +41,9 @@ class LeagueView: BaseView {
         countryLeagueLabel.textAlignment = .center
         countryLeagueLabel.numberOfLines = 1
         countryLeagueLabel.lineBreakMode = .byTruncatingTail
-        countryLeagueLabel.font = UIFont(name: "Roboto-Regular", size: 14)
+        countryLeagueLabel.font = .robotoRegularSize14
 
-        leagueNameLabel.font = UIFont(name: "Roboto-Bold", size: 14)
+        leagueNameLabel.font = .robotoBoldSize14
         leagueNameLabel.textAlignment = .center
         leagueNameLabel.numberOfLines = 1
         leagueNameLabel.lineBreakMode = .byTruncatingTail
@@ -56,7 +56,7 @@ class LeagueView: BaseView {
         icPointerRight.image = UIImage(named: "firstScreen")
         icPointerRight.tintColor = .black
 
-        countryLabel.font = UIFont(name: "Roboto-Bold", size: 14)
+        countryLabel.font = .robotoBoldSize14
         countryLabel.textAlignment = .center
         countryLabel.numberOfLines = 1
         countryLabel.lineBreakMode = .byTruncatingTail
@@ -73,41 +73,40 @@ class LeagueView: BaseView {
         leagueNameLabel.setContentHuggingPriority(.required, for: .horizontal)
         leagueNameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        leagueLogoImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(32)
-            make.top.equalToSuperview().offset(12)
-            make.leading.equalToSuperview().offset(16)
+        leagueLogoImageView.snp.makeConstraints { 
+            $0.width.height.equalTo(32)
+            $0.top.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(16)
         }
 
-        countryLeagueLabel.snp.makeConstraints { make in
+        countryLeagueLabel.snp.makeConstraints {
             //make.height.equalTo(24)
-            make.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
-            make.top.equalToSuperview().offset(16)
+            $0.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
+            $0.top.equalToSuperview().offset(16)
         }
 
-        countryLabel.snp.makeConstraints { make in
+        countryLabel.snp.makeConstraints {
             //make.height.equalTo(16)
-            make.leading.equalTo(countryLeagueLabel)
-            make.top.equalTo(countryLeagueLabel).offset(4)
+            $0.leading.equalTo(countryLeagueLabel)
+            $0.top.equalTo(countryLeagueLabel).offset(4)
         }
 
-        arrowContainerLabel.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.top.equalTo(countryLeagueLabel)
-            make.leading.equalTo(countryLabel.snp.trailing)
+        arrowContainerLabel.snp.makeConstraints {
+            $0.width.height.equalTo(24)
+            $0.top.equalTo(countryLeagueLabel)
+            $0.leading.equalTo(countryLabel.snp.trailing)
         }
 
-        icPointerRight.snp.makeConstraints { make in
-            make.width.equalTo(10)
+        icPointerRight.snp.makeConstraints {
+            $0.width.equalTo(10)
             //make.height.equalTo(20)
-            make.centerY.equalTo(arrowContainerLabel)
-            make.leading.equalTo(arrowContainerLabel).offset(6)
+            $0.centerY.equalTo(arrowContainerLabel)
+            $0.leading.equalTo(arrowContainerLabel).offset(6)
         }
 
-        leagueNameLabel.snp.makeConstraints { make in
-            //make.height.equalTo(16)
-            make.leading.equalTo(arrowContainerLabel.snp.trailing)
-            make.top.equalTo(countryLeagueLabel).offset(4)
+        leagueNameLabel.snp.makeConstraints {
+            $0.leading.equalTo(arrowContainerLabel.snp.trailing)
+            $0.top.equalTo(countryLeagueLabel).offset(4)
         }
     }
 

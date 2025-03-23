@@ -6,25 +6,30 @@ class ViewController: UIViewController, BaseViewProtocol {
     
     private let dataSource = Homework2DataSource()
     private var events: [Event] = []
-    private var leagueView: LeagueView?
+    private let leagueView: LeagueView
     private let stackView = UIStackView()
-    
+
+
+    required init?(coder: NSCoder) {
+        let league = Homework2DataSource().laLigaLeague
+        self.leagueView = LeagueView(league: league())
+        super.init(coder: coder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
 
         events = dataSource.laLigaEvents()
 
         addViews()
         styleViews()
         setupConstraints()
-        setupGestureRecognizers()
+        
     }
     
-    
     func addViews() {
-        setupLeagueView()
         setupStackView()
+        view.addSubview(leagueView)
         populateEvents()
     }
     
@@ -36,37 +41,23 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func setupConstraints() {
-        guard let leagueView = leagueView else { return }
-        
-        leagueView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(56)
+        leagueView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(56)
         }
 
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(leagueView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
+        stackView.snp.makeConstraints {
+            $0.top.equalTo(leagueView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
         }
 
         for eventView in stackView.arrangedSubviews {
-            eventView.snp.makeConstraints { make in
-                make.height.equalTo(56)
+            eventView.snp.makeConstraints {
+                $0.height.equalTo(56)
             }
         }
-    }
-    
-    func setupGestureRecognizers() {
-    }
-    
-
-    private func setupLeagueView() {
-        let league = dataSource.laLigaLeague
-        leagueView = LeagueView(league: league())
-
-        guard let leagueView = leagueView else { return }
-        view.addSubview(leagueView)
     }
 
     private func setupStackView() {

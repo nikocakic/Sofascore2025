@@ -21,28 +21,17 @@ final class EventView: BaseView {
     private let awayTeamLabel = UILabel()
     private let numHomeTeamGoalsLabel = UILabel()
     private let numAwayTeamGoalsLabel = UILabel()
-    private let mainView = UIView()
-    private let mainStackView = UIStackView()
 
     internal override func addViews() {
-        addSubview(mainStackView)
-        mainStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        mainView.addSubview(homeTeamImageView)
-        mainView.addSubview(leftLabel)
-        mainView.addSubview(awayTeamImageView)
-        mainView.addSubview(timeLabel)
-        mainView.addSubview(minuteLabel)
-        mainView.addSubview(homeTeamLabel)
-        mainView.addSubview(awayTeamLabel)
-        mainView.addSubview(numHomeTeamGoalsLabel)
-        mainView.addSubview(numAwayTeamGoalsLabel)
-        
-        mainStackView.addArrangedSubview(mainView)
-
-        styleViews()
+        addSubview(homeTeamImageView)
+        addSubview(leftLabel)
+        addSubview(awayTeamImageView)
+        addSubview(timeLabel)
+        addSubview(minuteLabel)
+        addSubview(homeTeamLabel)
+        addSubview(awayTeamLabel)
+        addSubview(numHomeTeamGoalsLabel)
+        addSubview(numAwayTeamGoalsLabel)
     }
 
     internal override func styleViews() {
@@ -53,94 +42,84 @@ final class EventView: BaseView {
         awayTeamImageView.clipsToBounds = true
 
         leftLabel.textAlignment = .center
-        leftLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        leftLabel.font = .headline
         leftLabel.textColor = .black
 
         timeLabel.textAlignment = .center
-        timeLabel.textColor = .black
-        timeLabel.font = UIFont(name: "Roboto-Regular", size: 12)
-        timeLabel.textColor = UIColor(red: 18/255, green: 18/255, blue: 18/255, alpha: 0.4)
+        timeLabel.font = .robotoRegularSize12
+        timeLabel.textColor = .semiTransparentDark
 
         minuteLabel.textAlignment = .center
-        minuteLabel.font = UIFont(name: "Roboto-Regular", size: 12)
-        minuteLabel.textColor = .black
-        minuteLabel.textColor = UIColor(red: 18/255, green: 18/255, blue: 18/255, alpha: 0.4)
+        minuteLabel.font = .robotoRegularSize12
+        minuteLabel.textColor = .semiTransparentDark
 
-        homeTeamLabel.font = UIFont(name: "Roboto-Regular", size: 14)
+        homeTeamLabel.font = .robotoRegularSize14
         homeTeamLabel.textAlignment = .left
 
-        awayTeamLabel.font = UIFont(name: "Roboto-Regular", size: 14)
+        awayTeamLabel.font = .robotoRegularSize14
         awayTeamLabel.textAlignment = .left
 
-        numHomeTeamGoalsLabel.font = UIFont(name: "Roboto-Regular", size: 14)
+        numHomeTeamGoalsLabel.font = .robotoRegularSize14
         numHomeTeamGoalsLabel.textAlignment = .right
 
-        numAwayTeamGoalsLabel.font = UIFont(name: "Roboto-Regular", size: 14)
+        numAwayTeamGoalsLabel.font = .robotoRegularSize14
         numAwayTeamGoalsLabel.textAlignment = .right
-
-        mainStackView.axis = .vertical
-        mainStackView.spacing = 0
-        mainStackView.alignment = .fill
 
         setupConstraints()
     }
 
     internal override func setupConstraints() {
-        timeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(leftLabel)
-            make.width.equalTo(56)
-            make.top.equalTo(leftLabel).offset(10)
+        timeLabel.snp.makeConstraints {
+            $0.centerX.equalTo(leftLabel)
+            $0.width.equalTo(56)
+            $0.top.equalTo(leftLabel).offset(10)
         }
 
-        minuteLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(leftLabel)
-            make.top.equalTo(timeLabel.snp.bottom).offset(4)
-            make.width.equalTo(56)
+        minuteLabel.snp.makeConstraints {
+            $0.centerX.equalTo(leftLabel)
+            $0.top.equalTo(timeLabel.snp.bottom).offset(4)
+            $0.width.equalTo(56)
         }
 
-        leftLabel.snp.makeConstraints { make in
-            make.leading.equalTo(mainView)
-            make.width.equalTo(64)
+        leftLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalTo(64)
         }
 
-        homeTeamLabel.snp.makeConstraints { make in
-            make.width.equalTo(192)
-            make.leading.equalTo(leftLabel.snp.trailing).offset(40)
-            make.top.equalTo(mainView).offset(10)
+        homeTeamLabel.snp.makeConstraints {
+            $0.width.equalTo(192)
+            $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
+            $0.top.equalToSuperview().offset(10)
         }
 
-        awayTeamLabel.snp.makeConstraints { make in
-            make.width.equalTo(192)
-            make.leading.equalTo(leftLabel.snp.trailing).offset(40)
-            make.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
+        awayTeamLabel.snp.makeConstraints {
+            $0.width.equalTo(192)
+            $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
+            $0.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
         }
 
-        homeTeamImageView.snp.makeConstraints { make in
-            make.top.equalTo(mainView).offset(10)
-            make.leading.equalTo(leftLabel.snp.trailing).offset(16)
-            make.width.height.equalTo(16)
+        homeTeamImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.equalTo(leftLabel.snp.trailing).offset(16)
+            $0.width.height.equalTo(16)
         }
         
-        awayTeamImageView.snp.makeConstraints { make in
-            make.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
-            make.leading.equalTo(leftLabel.snp.trailing).offset(16)
-            make.width.height.equalTo(16)
+        awayTeamImageView.snp.makeConstraints {
+            $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
+            $0.leading.equalTo(leftLabel.snp.trailing).offset(16)
+            $0.width.height.equalTo(16)
         }
         
-        numHomeTeamGoalsLabel.snp.makeConstraints { make in
-            make.width.equalTo(32)
-            make.top.equalTo(mainView).offset(10)
-            make.trailing.equalTo(mainView).offset(-10)
+        numHomeTeamGoalsLabel.snp.makeConstraints {
+            $0.width.equalTo(32)
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
 
-        numAwayTeamGoalsLabel.snp.makeConstraints { make in
-            make.width.equalTo(32)
-            make.bottom.equalTo(mainView).offset(-10)
-            make.trailing.equalTo(mainView).offset(-10)
-        }
-
-        mainView.snp.makeConstraints { make in
-            make.width.equalTo(360)
+        numAwayTeamGoalsLabel.snp.makeConstraints {
+            $0.width.equalTo(32)
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
     }
 
@@ -186,13 +165,12 @@ final class EventView: BaseView {
             }
             guard let awayScore = event.awayScore, let homeScore = event.homeScore else { return }
 
-            if awayScore > homeScore{
-                homeTeamLabel.textColor = UIColor(red: 18/255, green: 18/255, blue: 18/255, alpha: 0.4)
+            if awayScore > homeScore {
+                homeTeamLabel.textColor = .semiTransparentDark
             }
-            if awayScore < homeScore{
-                awayTeamLabel.textColor = UIColor(red: 18/255, green: 18/255, blue: 18/255, alpha: 0.4)
+            if awayScore < homeScore {
+                awayTeamLabel.textColor = .semiTransparentDark
             }
-            
         }
     }
 
@@ -214,7 +192,7 @@ final class EventView: BaseView {
         case .finished:
             minuteLabel.text = "FT"
         case .halftime:
-            minuteLabel.text = "w/e"
+            minuteLabel.text = "HT"
         }
     }
 }
