@@ -4,16 +4,16 @@ import SofaAcademic
 
 final class EventView: BaseView {
     
-    private let event: Event
+    private let event: EventViewModel
 
-    public init(event: Event) {
+    public init(event: EventViewModel) {
         self.event = event
         super.init()
         configure(with: event)
     }
     
-    private let homeTeamImageView = UIImageView()
-    private let awayTeamImageView = UIImageView()
+    private var homeTeamImageView = UIImageView()
+    private var awayTeamImageView = UIImageView()
     private let leftLabel = UILabel()
     private let rigthLabel = UILabel()
     private let timeLabel = UILabel()
@@ -132,44 +132,29 @@ final class EventView: BaseView {
         
     }
 
-    func configure(with event: Event) {
-        loadImage(from: event.homeTeam.logoUrl, into: homeTeamImageView)
-        loadImage(from: event.awayTeam.logoUrl, into: awayTeamImageView)
+    func configure(with event: EventViewModel) {
+        homeTeamImageView.image=event.homeTeam.image
+        awayTeamImageView.image=event.awayTeam.image
         homeTeamLabel.text = event.homeTeam.name
         awayTeamLabel.text = event.awayTeam.name
-        updateMinuteLabel(from: event.status, timestamp: event.startTimestamp)
+        updateMinuteLabel(from: event.statusString, timestamp: event.startTimeString)
         loadScores(from: event)
     }
 
-    private func loadImage(from urlString: String?, into imageView: UIImageView) {
-        guard let urlString = urlString, let url = URL(string: urlString) else {
-            imageView.image = UIImage(systemName: "photo")
-            return
-        }
 
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    imageView.image = image
-                }
-            }
-        }
-    }
-
-    private func loadScores(from event: Event) {
-        if event.status == .finished || event.status == .inProgress {
-            numHomeTeamGoalsLabel.text = "\(event.homeScore ?? 0)"
-            numAwayTeamGoalsLabel.text = "\(event.awayScore ?? 0)"
-            if event.status == .inProgress {
+    private func loadScores(from event: EventViewModel) {
+        if event.statusString == .finished || event.statusString == .inProgress {
+            numHomeTeamGoalsLabel.text = "\(event.homeTeam.score ?? 0)"
+            numAwayTeamGoalsLabel.text = "\(event.awayTeam.score ?? 0)"
+            if event.statusString == .inProgress {
                 numHomeTeamGoalsLabel.textColor = .red
                 numAwayTeamGoalsLabel.textColor = .red
             }
-            guard let awayScore = event.awayScore, let homeScore = event.homeScore else { return }
 
-            if awayScore > homeScore {
+            if event.awayTeam.score! > event.homeTeam.score! {
                 homeTeamLabel.textColor = .semiTransparentDark
             }
-            if awayScore < homeScore {
+            if event.awayTeam.score! < event.homeTeam.score! {
                 awayTeamLabel.textColor = .semiTransparentDark
             }
         }

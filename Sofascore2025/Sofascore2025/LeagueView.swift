@@ -12,7 +12,7 @@ final class LeagueView: BaseView {
     private let countryLabel = UILabel()
 
 
-    public init(league: League) {
+    public init(league: LeagueViewModel) {
         super.init()
         configure(with: league)
     }
@@ -83,19 +83,9 @@ final class LeagueView: BaseView {
     }
 
 
-    func configure(with league: League) {
-        leagueNameLabel.text = league.name
-        countryLabel.text = league.country?.name ?? "Unknown"
-        leagueLogoImageView.image = UIImage(systemName: "photo")
-
-        if let logoUrl = league.logoUrl, let url = URL(string: logoUrl) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self.leagueLogoImageView.image = image
-                    }
-                }
-            }
-        }
+    func configure(with league: LeagueViewModel) {
+        leagueNameLabel.text = league.leagueName
+        countryLabel.text = league.countryName
+        leagueLogoImageView.image = league.image
     }
 }
