@@ -14,6 +14,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         self.leagueView = LeagueView(league: league())
         self.events = dataSource.laLigaEvents()
         super.init(coder: coder)
+        setupData()
         populateEvents()
     }
     
@@ -60,5 +61,8 @@ class ViewController: UIViewController, BaseViewProtocol {
             let eventView = EventView(event: event)
             stackView.addArrangedSubview(eventView)
         }
+    }
+    private func setupData(){
+        
     }
 }

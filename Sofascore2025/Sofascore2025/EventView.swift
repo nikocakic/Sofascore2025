@@ -15,6 +15,7 @@ final class EventView: BaseView {
     private let homeTeamImageView = UIImageView()
     private let awayTeamImageView = UIImageView()
     private let leftLabel = UILabel()
+    private let rigthLabel = UILabel()
     private let timeLabel = UILabel()
     private let minuteLabel = UILabel()
     private let homeTeamLabel = UILabel()
@@ -22,22 +23,27 @@ final class EventView: BaseView {
     private let numHomeTeamGoalsLabel = UILabel()
     private let numAwayTeamGoalsLabel = UILabel()
 
-    internal override func addViews() {
+    override func addViews() {
         addSubview(leftLabel)
         leftLabel.addSubview(minuteLabel)
         leftLabel.addSubview(timeLabel)
-        addSubview(homeTeamImageView)
-        addSubview(awayTeamImageView)
-        addSubview(homeTeamLabel)
-        addSubview(awayTeamLabel)
-        addSubview(numHomeTeamGoalsLabel)
-        addSubview(numAwayTeamGoalsLabel)
+        addSubview(rigthLabel)
+        rigthLabel.addSubview(homeTeamImageView)
+        rigthLabel.addSubview(awayTeamImageView)
+        rigthLabel.addSubview(homeTeamLabel)
+        rigthLabel.addSubview(awayTeamLabel)
+        rigthLabel.addSubview(numHomeTeamGoalsLabel)
+        rigthLabel.addSubview(numAwayTeamGoalsLabel)
     }
 
-    internal override func styleViews() {
+    override func styleViews() {
         leftLabel.textAlignment = .center
         leftLabel.font = .headline
         leftLabel.textColor = .black
+        
+        rigthLabel.textAlignment = .center
+        rigthLabel.font = .headline
+        rigthLabel.textColor = .black
 
         timeLabel.textAlignment = .center
         timeLabel.font = .robotoRegularSize12
@@ -62,68 +68,75 @@ final class EventView: BaseView {
         setupConstraints()
     }
 
-    internal override func setupConstraints() {
+    override func setupConstraints() {
         leftLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
-            $0.width.equalTo(64)
+            $0.trailing.equalTo(rigthLabel.snp.leading)
             $0.top.bottom.equalToSuperview()
+            $0.width.equalTo(64)
         }
         
         timeLabel.snp.makeConstraints {
             $0.centerX.equalTo(leftLabel)
-            $0.width.equalTo(56)
+            $0.width.equalToSuperview().inset(4)
             $0.top.equalTo(leftLabel).offset(10)
         }
 
         minuteLabel.snp.makeConstraints {
             $0.centerX.equalTo(leftLabel)
             $0.top.equalTo(timeLabel.snp.bottom).offset(4)
-            $0.width.equalTo(56)
+            $0.width.equalToSuperview().inset(4)
         }
 
         homeTeamLabel.snp.makeConstraints {
-            $0.width.equalTo(192)
-            $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
-            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalTo(numHomeTeamGoalsLabel.snp.leading).offset(16)
+            $0.leading.equalToSuperview().inset(40)
+            $0.top.equalToSuperview().inset(10)
         }
 
         awayTeamLabel.snp.makeConstraints {
-            $0.width.equalTo(192)
-            $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
+            $0.trailing.equalTo(numAwayTeamGoalsLabel.snp.leading).offset(16)
+            $0.leading.equalToSuperview().inset(40)
             $0.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
             $0.bottom.equalToSuperview().inset(10)
         }
 
         homeTeamImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalTo(leftLabel.snp.trailing).offset(16)
+            $0.top.equalToSuperview().inset(10)
+            $0.leading.equalToSuperview().inset(16)
             $0.width.height.equalTo(16)
         }
         
         awayTeamImageView.snp.makeConstraints {
             $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
-            $0.leading.equalTo(leftLabel.snp.trailing).offset(16)
+            $0.leading.equalToSuperview().inset(16)
             $0.width.height.equalTo(16)
         }
         
         numHomeTeamGoalsLabel.snp.makeConstraints {
-            $0.width.equalTo(32)
             $0.top.equalToSuperview().inset(10)
             $0.trailing.equalToSuperview().inset(16)
         }
 
         numAwayTeamGoalsLabel.snp.makeConstraints {
-            $0.width.equalTo(32)
             $0.bottom.equalToSuperview().inset(10)
             $0.trailing.equalToSuperview().inset(16)
         }
+        
+        rigthLabel.snp.makeConstraints{
+            $0.top.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.leading.equalTo(leftLabel.snp.trailing)
+        }
+        
     }
 
     func configure(with event: Event) {
         loadImage(from: event.homeTeam.logoUrl, into: homeTeamImageView)
         loadImage(from: event.awayTeam.logoUrl, into: awayTeamImageView)
-        loadHomeTeamName(from: event.homeTeam)
-        loadAwayTeamName(from: event.awayTeam)
+        homeTeamLabel.text = event.homeTeam.name
+        awayTeamLabel.text = event.awayTeam.name
         updateMinuteLabel(from: event.status, timestamp: event.startTimestamp)
         loadScores(from: event)
     }
@@ -141,14 +154,6 @@ final class EventView: BaseView {
                 }
             }
         }
-    }
-
-    private func loadHomeTeamName(from team: Team) {
-        homeTeamLabel.text = team.name
-    }
-
-    private func loadAwayTeamName(from team: Team) {
-        awayTeamLabel.text = team.name
     }
 
     private func loadScores(from event: Event) {

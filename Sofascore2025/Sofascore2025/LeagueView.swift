@@ -2,10 +2,8 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-class LeagueView: BaseView {
+final class LeagueView: BaseView {
 
-    private let league: League
-    
     private let leagueLogoImageView = UIImageView()
     private let countryLeagueLabel = UILabel()
     private let leagueNameLabel = UILabel()
@@ -15,16 +13,11 @@ class LeagueView: BaseView {
 
 
     public init(league: League) {
-        self.league = league
         super.init()
-        configureWithLeague()
+        configure(with: league)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    internal override func addViews() {
+    override func addViews() {
         addSubview(leagueLogoImageView)
         addSubview(countryLeagueLabel)
         countryLeagueLabel.addSubview(countryLabel)
@@ -33,7 +26,7 @@ class LeagueView: BaseView {
         arrowContainerLabel.addSubview(icPointerRight)
     }
 
-    internal override func styleViews() {
+    override func styleViews() {
         countryLeagueLabel.font = .robotoRegularSize14
 
         leagueNameLabel.font = .robotoBoldSize14
@@ -54,7 +47,7 @@ class LeagueView: BaseView {
     }
 
 
-    internal override func setupConstraints() {
+    override func setupConstraints() {
         leagueLogoImageView.snp.makeConstraints {
             $0.size.equalTo(32)
             $0.leading.equalToSuperview().inset(16)
@@ -90,7 +83,7 @@ class LeagueView: BaseView {
     }
 
 
-    private func configureWithLeague() {
+    func configure(with league: League) {
         leagueNameLabel.text = league.name
         countryLabel.text = league.country?.name ?? "Unknown"
         leagueLogoImageView.image = UIImage(systemName: "photo")
