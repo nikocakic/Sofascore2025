@@ -23,11 +23,11 @@ final class EventView: BaseView {
     private let numAwayTeamGoalsLabel = UILabel()
 
     internal override func addViews() {
-        addSubview(homeTeamImageView)
         addSubview(leftLabel)
+        leftLabel.addSubview(minuteLabel)
+        leftLabel.addSubview(timeLabel)
+        addSubview(homeTeamImageView)
         addSubview(awayTeamImageView)
-        addSubview(timeLabel)
-        addSubview(minuteLabel)
         addSubview(homeTeamLabel)
         addSubview(awayTeamLabel)
         addSubview(numHomeTeamGoalsLabel)
@@ -35,12 +35,6 @@ final class EventView: BaseView {
     }
 
     internal override func styleViews() {
-        homeTeamImageView.contentMode = .scaleAspectFit
-        homeTeamImageView.clipsToBounds = true
-
-        awayTeamImageView.contentMode = .scaleAspectFit
-        awayTeamImageView.clipsToBounds = true
-
         leftLabel.textAlignment = .center
         leftLabel.font = .headline
         leftLabel.textColor = .black
@@ -69,6 +63,12 @@ final class EventView: BaseView {
     }
 
     internal override func setupConstraints() {
+        leftLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.width.equalTo(64)
+            $0.top.bottom.equalToSuperview()
+        }
+        
         timeLabel.snp.makeConstraints {
             $0.centerX.equalTo(leftLabel)
             $0.width.equalTo(56)
@@ -81,11 +81,6 @@ final class EventView: BaseView {
             $0.width.equalTo(56)
         }
 
-        leftLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.width.equalTo(64)
-        }
-
         homeTeamLabel.snp.makeConstraints {
             $0.width.equalTo(192)
             $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
@@ -96,6 +91,7 @@ final class EventView: BaseView {
             $0.width.equalTo(192)
             $0.leading.equalTo(leftLabel.snp.trailing).offset(40)
             $0.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
+            $0.bottom.equalToSuperview().inset(10)
         }
 
         homeTeamImageView.snp.makeConstraints {
@@ -112,14 +108,14 @@ final class EventView: BaseView {
         
         numHomeTeamGoalsLabel.snp.makeConstraints {
             $0.width.equalTo(32)
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalToSuperview().offset(-10)
+            $0.top.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().inset(16)
         }
 
         numAwayTeamGoalsLabel.snp.makeConstraints {
             $0.width.equalTo(32)
-            $0.bottom.equalToSuperview().offset(-10)
-            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().inset(16)
         }
     }
 

@@ -5,16 +5,7 @@ import SofaAcademic
 class LeagueView: BaseView {
 
     private let league: League
-
-    public init(league: League) {
-        self.league = league
-        super.init()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    
     private let leagueLogoImageView = UIImageView()
     private let countryLeagueLabel = UILabel()
     private let leagueNameLabel = UILabel()
@@ -22,32 +13,33 @@ class LeagueView: BaseView {
     private let icPointerRight = UIImageView()
     private let countryLabel = UILabel()
 
-    internal override func addViews() {
+
+    public init(league: League) {
+        self.league = league
+        super.init()
         configureWithLeague()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    internal override func addViews() {
         addSubview(leagueLogoImageView)
         addSubview(countryLeagueLabel)
-        addSubview(countryLabel)
-        addSubview(icPointerRight)
-        addSubview(arrowContainerLabel)
-        addSubview(leagueNameLabel)
-        
-        styleViews()
+        countryLeagueLabel.addSubview(countryLabel)
+        countryLeagueLabel.addSubview(arrowContainerLabel)
+        countryLeagueLabel.addSubview(leagueNameLabel)
+        arrowContainerLabel.addSubview(icPointerRight)
     }
 
     internal override func styleViews() {
-        leagueLogoImageView.contentMode = .scaleAspectFit
-        leagueLogoImageView.clipsToBounds = true
-
-        countryLeagueLabel.textAlignment = .center
-        countryLeagueLabel.numberOfLines = 1
-        countryLeagueLabel.lineBreakMode = .byTruncatingTail
         countryLeagueLabel.font = .robotoRegularSize14
 
         leagueNameLabel.font = .robotoBoldSize14
-        leagueNameLabel.textAlignment = .center
+        leagueNameLabel.textAlignment = .left
         leagueNameLabel.numberOfLines = 1
-        leagueNameLabel.lineBreakMode = .byTruncatingTail
-        leagueNameLabel.textColor = UIColor(red: 18/255, green: 18/255, blue: 18/255, alpha: 0.4)
+        leagueNameLabel.textColor = .semiTransparentDark
 
 
         arrowContainerLabel.textAlignment = .center
@@ -57,58 +49,46 @@ class LeagueView: BaseView {
         icPointerRight.tintColor = .black
 
         countryLabel.font = .robotoBoldSize14
-        countryLabel.textAlignment = .center
+        countryLabel.textAlignment = .left
         countryLabel.numberOfLines = 1
-        countryLabel.lineBreakMode = .byTruncatingTail
     }
 
 
     internal override func setupConstraints() {
-        countryLabel.setContentHuggingPriority(.required, for: .horizontal)
-        countryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        countryLeagueLabel.setContentHuggingPriority(.required, for: .horizontal)
-        countryLeagueLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        leagueNameLabel.setContentHuggingPriority(.required, for: .horizontal)
-        leagueNameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        leagueLogoImageView.snp.makeConstraints { 
-            $0.width.height.equalTo(32)
-            $0.top.equalToSuperview().offset(12)
-            $0.leading.equalToSuperview().offset(16)
+        leagueLogoImageView.snp.makeConstraints {
+            $0.size.equalTo(32)
+            $0.leading.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(12)
         }
 
         countryLeagueLabel.snp.makeConstraints {
-            //make.height.equalTo(24)
             $0.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
-            $0.top.equalToSuperview().offset(16)
+            $0.trailing.lessThanOrEqualToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
+            $0.top.bottom.equalToSuperview().inset(16)
         }
 
         countryLabel.snp.makeConstraints {
-            //make.height.equalTo(16)
-            $0.leading.equalTo(countryLeagueLabel)
-            $0.top.equalTo(countryLeagueLabel).offset(4)
+            $0.leading.equalToSuperview()
+            $0.top.bottom.equalToSuperview().inset(4)
         }
 
         arrowContainerLabel.snp.makeConstraints {
-            $0.width.height.equalTo(24)
-            $0.top.equalTo(countryLeagueLabel)
             $0.leading.equalTo(countryLabel.snp.trailing)
+            $0.centerY.equalToSuperview()
         }
 
         icPointerRight.snp.makeConstraints {
-            $0.width.equalTo(10)
-            //make.height.equalTo(20)
-            $0.centerY.equalTo(arrowContainerLabel)
-            $0.leading.equalTo(arrowContainerLabel).offset(6)
+            $0.edges.equalToSuperview().inset(4)
         }
 
         leagueNameLabel.snp.makeConstraints {
             $0.leading.equalTo(arrowContainerLabel.snp.trailing)
-            $0.top.equalTo(countryLeagueLabel).offset(4)
+            $0.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
         }
     }
+
 
     private func configureWithLeague() {
         leagueNameLabel.text = league.name
