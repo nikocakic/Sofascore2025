@@ -4,18 +4,12 @@ import SofaAcademic
 
 final class EventView: BaseView {
     
-    private let event: EventViewModel
 
-    public init(event: EventViewModel) {
-        self.event = event
-        super.init()
-        configure(with: event)
-    }
     
     private var homeTeamImageView = UIImageView()
     private var awayTeamImageView = UIImageView()
-    private let leftLabel = UILabel()
-    private let rigthLabel = UILabel()
+    private let leftContainerView = UIView()
+    private let rigthContainerView = UIView()
     private let timeLabel = UILabel()
     private let minuteLabel = UILabel()
     private let homeTeamLabel = UILabel()
@@ -24,27 +18,19 @@ final class EventView: BaseView {
     private let numAwayTeamGoalsLabel = UILabel()
 
     override func addViews() {
-        addSubview(leftLabel)
-        leftLabel.addSubview(minuteLabel)
-        leftLabel.addSubview(timeLabel)
-        addSubview(rigthLabel)
-        rigthLabel.addSubview(homeTeamImageView)
-        rigthLabel.addSubview(awayTeamImageView)
-        rigthLabel.addSubview(homeTeamLabel)
-        rigthLabel.addSubview(awayTeamLabel)
-        rigthLabel.addSubview(numHomeTeamGoalsLabel)
-        rigthLabel.addSubview(numAwayTeamGoalsLabel)
+        addSubview(leftContainerView)
+        leftContainerView.addSubview(minuteLabel)
+        leftContainerView.addSubview(timeLabel)
+        addSubview(rigthContainerView)
+        rigthContainerView.addSubview(homeTeamImageView)
+        rigthContainerView.addSubview(awayTeamImageView)
+        rigthContainerView.addSubview(homeTeamLabel)
+        rigthContainerView.addSubview(awayTeamLabel)
+        rigthContainerView.addSubview(numHomeTeamGoalsLabel)
+        rigthContainerView.addSubview(numAwayTeamGoalsLabel)
     }
 
     override func styleViews() {
-        leftLabel.textAlignment = .center
-        leftLabel.font = .headline
-        leftLabel.textColor = .black
-        
-        rigthLabel.textAlignment = .center
-        rigthLabel.font = .headline
-        rigthLabel.textColor = .black
-
         timeLabel.textAlignment = .center
         timeLabel.font = .robotoRegularSize12
         timeLabel.textColor = .semiTransparentDark
@@ -69,21 +55,21 @@ final class EventView: BaseView {
     }
 
     override func setupConstraints() {
-        leftLabel.snp.makeConstraints {
+        leftContainerView.snp.makeConstraints {
             $0.leading.equalToSuperview()
-            $0.trailing.equalTo(rigthLabel.snp.leading)
+            $0.trailing.equalTo(rigthContainerView.snp.leading)
             $0.top.bottom.equalToSuperview()
             $0.width.equalTo(64)
         }
         
         timeLabel.snp.makeConstraints {
-            $0.centerX.equalTo(leftLabel)
+            $0.centerX.equalTo(leftContainerView)
             $0.width.equalToSuperview().inset(4)
-            $0.top.equalTo(leftLabel).offset(10)
+            $0.top.equalTo(leftContainerView).offset(10)
         }
 
         minuteLabel.snp.makeConstraints {
-            $0.centerX.equalTo(leftLabel)
+            $0.centerX.equalTo(leftContainerView)
             $0.top.equalTo(timeLabel.snp.bottom).offset(4)
             $0.width.equalToSuperview().inset(4)
         }
@@ -123,11 +109,11 @@ final class EventView: BaseView {
             $0.trailing.equalToSuperview().inset(16)
         }
         
-        rigthLabel.snp.makeConstraints{
+        rigthContainerView.snp.makeConstraints{
             $0.top.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.leading.equalTo(leftLabel.snp.trailing)
+            $0.leading.equalTo(leftContainerView.snp.trailing)
         }
         
     }

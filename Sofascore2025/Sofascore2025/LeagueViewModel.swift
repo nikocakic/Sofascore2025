@@ -10,21 +10,6 @@ import Foundation
 import UIKit
 import SofaAcademic
 
-struct TeamViewModel {
-
-    let image: UIImage
-    let name: String
-    let score: Int?
-}
-
-struct EventViewModel {
-
-    let startTimeString: Int
-    let statusString: EventStatus
-    let homeTeam: TeamViewModel
-    let awayTeam: TeamViewModel
-}
-
 struct LeagueViewModel{
     let leagueName: String
     let countryName: String

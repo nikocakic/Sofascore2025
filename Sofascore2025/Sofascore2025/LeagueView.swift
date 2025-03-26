@@ -5,37 +5,22 @@ import SofaAcademic
 final class LeagueView: BaseView {
 
     private let leagueLogoImageView = UIImageView()
-    private let countryLeagueLabel = UILabel()
     private let leagueNameLabel = UILabel()
-    private let arrowContainerLabel = UILabel()
     private let icPointerRight = UIImageView()
     private let countryLabel = UILabel()
 
-
-    public init(league: LeagueViewModel) {
-        super.init()
-        configure(with: league)
-    }
-
     override func addViews() {
         addSubview(leagueLogoImageView)
-        addSubview(countryLeagueLabel)
-        countryLeagueLabel.addSubview(countryLabel)
-        countryLeagueLabel.addSubview(arrowContainerLabel)
-        countryLeagueLabel.addSubview(leagueNameLabel)
-        arrowContainerLabel.addSubview(icPointerRight)
+        addSubview(countryLabel)
+        addSubview(leagueNameLabel)
+        addSubview(icPointerRight)
     }
 
     override func styleViews() {
-        countryLeagueLabel.font = .robotoRegularSize14
-
         leagueNameLabel.font = .robotoBoldSize14
         leagueNameLabel.textAlignment = .left
         leagueNameLabel.numberOfLines = 1
         leagueNameLabel.textColor = .semiTransparentDark
-
-
-        arrowContainerLabel.textAlignment = .center
 
         icPointerRight.contentMode = .scaleAspectFit
         icPointerRight.image = UIImage(named: "firstScreen")
@@ -54,31 +39,20 @@ final class LeagueView: BaseView {
             $0.top.bottom.equalToSuperview().inset(12)
         }
 
-        countryLeagueLabel.snp.makeConstraints {
-            $0.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
-            $0.trailing.lessThanOrEqualToSuperview().inset(16)
-            $0.centerY.equalToSuperview()
-            $0.top.bottom.equalToSuperview().inset(16)
-        }
-
         countryLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.top.bottom.equalToSuperview().inset(4)
-        }
-
-        arrowContainerLabel.snp.makeConstraints {
-            $0.leading.equalTo(countryLabel.snp.trailing)
-            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(leagueLogoImageView.snp.trailing).offset(32)
+            $0.top.bottom.equalToSuperview().inset(20)
         }
 
         icPointerRight.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(4)
+            $0.top.bottom.equalToSuperview().inset(23)
+            $0.leading.equalTo(countryLabel.snp.trailing).offset(10)
+            $0.trailing.equalTo(leagueNameLabel.snp.leading).offset(-9)
         }
 
         leagueNameLabel.snp.makeConstraints {
-            $0.leading.equalTo(arrowContainerLabel.snp.trailing)
-            $0.trailing.equalToSuperview()
-            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(icPointerRight.snp.trailing).offset(9)
+            $0.top.bottom.equalToSuperview().inset(20)
         }
     }
 

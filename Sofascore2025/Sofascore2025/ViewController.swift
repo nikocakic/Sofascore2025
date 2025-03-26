@@ -10,7 +10,9 @@ class ViewController: UIViewController, BaseViewProtocol {
         let league = Homework2DataSource().laLigaLeague()
         let leagueImage = imageUrlToUIImage(imageURL: league.logoUrl)
         let leagueVM = LeagueViewModel(leagueName: league.name, countryName: league.country!.name, image: leagueImage ?? UIImage(systemName: "photo")!)
-        return LeagueView(league: leagueVM)
+        let leagueView = LeagueView()
+        leagueView.configure(with: leagueVM)
+        return leagueView
     }()
     private let stackView = UIStackView()
     
@@ -67,7 +69,9 @@ class ViewController: UIViewController, BaseViewProtocol {
             
             let eventViewModel = configureEventAtributes(event: event, homeTeam: homeTeamViewModel, awayTeam: awayTeamViewModel)
             
-            let eventView = EventView(event: eventViewModel)
+            let eventView = EventView()
+            
+            eventView.configure(with: eventViewModel)
             eventViews.append(eventView)
         }
 
