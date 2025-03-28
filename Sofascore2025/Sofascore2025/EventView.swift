@@ -14,9 +14,9 @@ final class EventView: BaseView {
     private let minuteLabel = UILabel()
     private let homeTeamLabel = UILabel()
     private let awayTeamLabel = UILabel()
-    private let numHomeTeamGoalsLabel = UILabel()
-    private let numAwayTeamGoalsLabel = UILabel()
-
+    private var numHomeTeamGoalsLabel = UILabel()
+    private var numAwayTeamGoalsLabel = UILabel()
+    
     override func addViews() {
         addSubview(leftContainerView)
         leftContainerView.addSubview(minuteLabel)
@@ -41,7 +41,7 @@ final class EventView: BaseView {
 
         homeTeamLabel.font = .robotoRegularSize14
         homeTeamLabel.textAlignment = .left
-
+       
         awayTeamLabel.font = .robotoRegularSize14
         awayTeamLabel.textAlignment = .left
 
@@ -50,7 +50,7 @@ final class EventView: BaseView {
 
         numAwayTeamGoalsLabel.font = .robotoRegularSize14
         numAwayTeamGoalsLabel.textAlignment = .right
-
+        
         setupConstraints()
     }
 
@@ -123,48 +123,22 @@ final class EventView: BaseView {
         awayTeamImageView.image=event.awayTeam.image
         homeTeamLabel.text = event.homeTeam.name
         awayTeamLabel.text = event.awayTeam.name
-        updateMinuteLabel(from: event.statusString, timestamp: event.startTimeString)
-        loadScores(from: event)
+        timeLabel.text = event.time
+        minuteLabel.text = event.minute
+        
+        numHomeTeamGoalsLabel.text = event.homeTeam.score != nil ? String(event.homeTeam.score!) : ""
+
+        numAwayTeamGoalsLabel.text = event.awayTeam.score != nil ? String(event.awayTeam.score!) : ""
+
+
+        
+        homeTeamLabel.textColor = event.homeTeam.teamColor
+        awayTeamLabel.textColor = event.awayTeam.teamColor
+        
+        numHomeTeamGoalsLabel.textColor = event.homeTeam.goalsColor
+        numAwayTeamGoalsLabel.textColor = event.awayTeam.goalsColor
+        
+        minuteLabel.textColor = event.minuteColor
     }
-
-
-    private func loadScores(from event: EventViewModel) {
-        if event.statusString == .finished || event.statusString == .inProgress {
-            numHomeTeamGoalsLabel.text = "\(event.homeTeam.score ?? 0)"
-            numAwayTeamGoalsLabel.text = "\(event.awayTeam.score ?? 0)"
-            if event.statusString == .inProgress {
-                numHomeTeamGoalsLabel.textColor = .red
-                numAwayTeamGoalsLabel.textColor = .red
-            }
-
-            if event.awayTeam.score! > event.homeTeam.score! {
-                homeTeamLabel.textColor = .semiTransparentDark
-            }
-            if event.awayTeam.score! < event.homeTeam.score! {
-                awayTeamLabel.textColor = .semiTransparentDark
-            }
-        }
-    }
-
-    private func updateMinuteLabel(from status: EventStatus, timestamp: Int) {
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        timeLabel.text = dateFormatter.string(from: date)
-
-        let calendar = Calendar.current
-        let minute = calendar.component(.minute, from: date)
-
-        switch status {
-        case .notStarted:
-            minuteLabel.text = "-"
-        case .inProgress:
-            minuteLabel.text = "\(minute)'"
-            minuteLabel.textColor = .red
-        case .finished:
-            minuteLabel.text = "FT"
-        case .halftime:
-            minuteLabel.text = "HT"
-        }
-    }
+    
 }

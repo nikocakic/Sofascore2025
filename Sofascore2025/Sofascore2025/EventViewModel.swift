@@ -10,16 +10,20 @@ import UIKit
 import SofaAcademic
 
 struct TeamViewModel {
-
-    let image: UIImage
-    let name: String
-    let score: Int?
+    var image: UIImage = UIImage(systemName: "photo")!
+    var name: String = "Unknown"
+    var score: Int? = nil
+    var goalsColor: UIColor? = .black
+    var teamColor: UIColor? = .black
 }
 
 struct EventViewModel {
-
-    let startTimeString: Int
-    let statusString: EventStatus
-    let homeTeam: TeamViewModel
-    let awayTeam: TeamViewModel
+    var startTimeString: Int = 0
+    var statusString: EventStatus = .notStarted
+    var homeTeam: TeamViewModel = TeamViewModel()
+    var awayTeam: TeamViewModel = TeamViewModel()
+    
+    var time: String = ""
+    var minute: String = ""
+    var minuteColor: UIColor = .semiTransparentDark
 }

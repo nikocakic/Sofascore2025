@@ -61,13 +61,8 @@ class ViewController: UIViewController, BaseViewProtocol {
     private func populateEvents() {
         var eventViews: [EventView] = []
         for event in dataSource.laLigaEvents() {
-            let homeNumGoals: Int? = event.status != .notStarted ? event.homeScore : nil
-            let awayNumGoals: Int? = event.status != .notStarted ? event.awayScore : nil
-            
-            let homeTeamViewModel = configureTeamAtributes(team: event.homeTeam, numGoals: homeNumGoals)
-            let awayTeamViewModel = configureTeamAtributes(team: event.awayTeam, numGoals: awayNumGoals)
-            
-            let eventViewModel = configureEventAtributes(event: event, homeTeam: homeTeamViewModel, awayTeam: awayTeamViewModel)
+
+            let eventViewModel = configureTeamEventAtributes(event: event)
             
             let eventView = EventView()
             
@@ -80,9 +75,20 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
     
-    private func configureTeamAtributes(team: Team, numGoals: Int?) -> TeamViewModel {
-        let teamImage = imageUrlToUIImage(imageURL: team.logoUrl)
-        return TeamViewModel(image: teamImage ?? UIImage(systemName: "photo")!, name: team.name, score: numGoals)
+    private func configureTeamEventAtributes(event: Event) -> EventViewModel {
+        var teamViewModel1 = TeamViewModel(name: event.homeTeam.name, score: event.homeScore)
+        var teamViewModel2 = TeamViewModel(name: event.awayTeam.name, score: event.awayScore)
+        
+        teamViewModel1.image = imageUrlToUIImage(imageURL: event.homeTeam.logoUrl)!
+        teamViewModel2.image = imageUrlToUIImage(imageURL: event.awayTeam.logoUrl)!
+        
+        teamViewModel1 = EventDataMapper.teamLoadColor(team: teamViewModel1, status: event.status, otherTeamGoal: event.awayScore)
+        teamViewModel2 = EventDataMapper.teamLoadColor(team: teamViewModel2, status: event.status, otherTeamGoal: event.homeScore)
+        
+        var eventViewModel = EventViewModel(startTimeString: event.startTimestamp, statusString: event.status, homeTeam: teamViewModel1, awayTeam: teamViewModel2)
+        eventViewModel = configureEventAtributes(event: eventViewModel)
+        
+        return eventViewModel
     }
     
     private func imageUrlToUIImage(imageURL: String?) -> UIImage? {
@@ -94,7 +100,11 @@ class ViewController: UIViewController, BaseViewProtocol {
         return nil
     }
     
-    private func configureEventAtributes(event: Event, homeTeam: TeamViewModel, awayTeam: TeamViewModel) -> EventViewModel {
-        return EventViewModel(startTimeString: event.startTimestamp, statusString: event.status, homeTeam: homeTeam, awayTeam: awayTeam)
+    private func configureEventAtributes(event: EventViewModel) -> EventViewModel {
+        var returnEventViewModel = EventViewModel(startTimeString: event.startTimeString, statusString: event.statusString, homeTeam: event.homeTeam, awayTeam: event.awayTeam)
+        
+        returnEventViewModel = EventDataMapper.updateMinuteLabel(event: returnEventViewModel)
+        
+        return returnEventViewModel
     }
 }
