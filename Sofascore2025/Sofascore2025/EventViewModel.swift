@@ -27,3 +27,8 @@ struct EventViewModel {
     var minute: String = ""
     var minuteColor: UIColor = .semiTransparentDark
 }
+
+struct SportLogoViewModel {
+    var image: UIImage = UIImage(systemName: "photo")!
+    var sportName: String
+}

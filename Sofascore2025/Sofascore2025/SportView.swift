@@ -1,0 +1,58 @@
+//
+//  SportView.swift
+//  Sofascore2025
+//
+//  Created by Niko on 30.03.2025..
+//
+
+import UIKit
+import SnapKit
+import SofaAcademic
+
+final class SportView: BaseView {
+    
+    private var homeTeamImageView = UIImageView()
+    private var sportName = UILabel()
+    private var selectedIcon = UIImageView()
+    
+    override func addViews() {
+        addSubview(homeTeamImageView)
+        addSubview(sportName)
+        addSubview(selectedIcon)
+    }
+    override func styleViews() {
+        sportName.font = .robotoRegularSize14
+        sportName.textColor = .whiteLabelColor
+        
+    }
+    override func setupConstraints() {
+        //ode su mi dimenzije cudne
+        homeTeamImageView.snp.makeConstraints{
+            $0.size.equalTo(16)
+            $0.top.equalToSuperview().inset(4)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(sportName.snp.top).offset(-4)
+        }
+        
+        sportName.snp.makeConstraints(){
+            $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(selectedIcon.snp.top).offset(-4)
+        }
+        
+        selectedIcon.snp.makeConstraints(){
+            $0.height.equalTo(4)
+            $0.width.equalTo(104)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(sportName.snp.bottom).offset(4)
+            $0.bottom.equalToSuperview()
+        }
+        
+    }
+    
+    func configure(with sport : SportLogoViewModel){
+        homeTeamImageView.image = sport.image
+        sportName.text = sport.sportName
+        selectedIcon.image = .selectedIcon
+    }
+}

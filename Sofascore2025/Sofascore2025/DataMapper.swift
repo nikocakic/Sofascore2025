@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-enum EventDataMapper {
+enum DataMapper {
     static func teamLoadColor(team: TeamViewModel, status : EventStatus, otherTeamGoal : Int?) -> TeamViewModel {
         var modifiedTeam = team
 
