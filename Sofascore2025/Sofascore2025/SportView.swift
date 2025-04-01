@@ -15,6 +15,8 @@ final class SportView: BaseView {
     private var sportName = UILabel()
     private var selectedIcon = UIImageView()
     
+    private var isSelected = false
+    
     override func addViews() {
         addSubview(homeTeamImageView)
         addSubview(sportName)
@@ -37,7 +39,7 @@ final class SportView: BaseView {
         sportName.snp.makeConstraints(){
             $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(selectedIcon.snp.top).offset(-4)
+            $0.bottom.equalToSuperview().inset(8)
         }
         
         selectedIcon.snp.makeConstraints(){
@@ -50,9 +52,17 @@ final class SportView: BaseView {
         
     }
     
+    func setSelected(_ selected: Bool) {
+        isSelected = selected
+        selectedIcon.isHidden = !selected
+    }
     func configure(with sport : SportLogoViewModel){
         homeTeamImageView.image = sport.image
         sportName.text = sport.sportName
         selectedIcon.image = .selectedIcon
+        isSelected = sport.isSelected
+        setSelected(isSelected)
     }
+    
+
 }

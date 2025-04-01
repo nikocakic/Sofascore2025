@@ -18,7 +18,7 @@ enum DataMapper {
                 modifiedTeam.goalsColor = .red
             }
             
-            if modifiedTeam.score! < otherTeamGoal! {
+            if (modifiedTeam.score! < otherTeamGoal! && status == .finished)  {
                 modifiedTeam.teamColor = .semiTransparentDark
             }
         }

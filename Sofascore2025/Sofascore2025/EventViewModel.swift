@@ -31,4 +31,5 @@ struct EventViewModel {
 struct SportLogoViewModel {
     var image: UIImage = UIImage(systemName: "photo")!
     var sportName: String
+    var isSelected: Bool
 }
