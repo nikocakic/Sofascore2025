@@ -9,14 +9,6 @@ import Foundation
 import UIKit
 import SofaAcademic
 
-struct TeamViewModel {
-    var image: UIImage = UIImage(systemName: "photo")!
-    var name: String = "Unknown"
-    var score: Int? = nil
-    var goalsColor: UIColor? = .black
-    var teamColor: UIColor? = .black
-}
-
 struct EventViewModel {
     var startTimeString: Int = 0
     var statusString: EventStatus = .notStarted
@@ -28,8 +20,3 @@ struct EventViewModel {
     var minuteColor: UIColor = .semiTransparentDark
 }
 
-struct SportLogoViewModel {
-    var image: UIImage = UIImage(systemName: "photo")!
-    var sportName: String
-    var isSelected: Bool
-}
