@@ -10,10 +10,15 @@ import Foundation
 import UIKit
 import SofaAcademic
 
-struct LeagueViewModel{
+struct LeagueViewModel {
     let leagueName: String
     let countryName: String
-    let image: UIImage
-}
+    let image: UIImage?
 
+    init(league: League) {
+        self.leagueName = league.name
+        self.countryName = league.country?.name ?? "Nepoznato"
+        self.image = DataMapper.imageUrlToUIImage(imageURL: league.logoUrl)
+    }
+}
 

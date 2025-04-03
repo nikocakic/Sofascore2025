@@ -56,7 +56,7 @@ final class SportView: BaseView {
         isSelected = selected
         selectedIcon.isHidden = !selected
     }
-    func configure(with sport : SportLogoViewModel){
+    func configure(with sport: SportLogoViewModel){
         homeTeamImageView.image = sport.image
         sportName.text = sport.sportName
         selectedIcon.image = .selectedIcon
@@ -64,5 +64,4 @@ final class SportView: BaseView {
         setSelected(isSelected)
     }
     
-
 }

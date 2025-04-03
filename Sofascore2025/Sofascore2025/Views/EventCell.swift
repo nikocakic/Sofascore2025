@@ -14,14 +14,14 @@ final class EventCell: UITableViewCell {
     
     static let identifier = "EventCell"
     
-    private var eventView : EventView!
+    private var eventView : EventView?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         eventView = EventView()
-        contentView.addSubview(eventView)
+        contentView.addSubview(eventView ?? UIView())
         
-        eventView.snp.makeConstraints(){
+        eventView?.snp.makeConstraints(){
             $0.edges.equalToSuperview()
         }
     }
@@ -31,6 +31,6 @@ final class EventCell: UITableViewCell {
     }
     
     func set (event: EventViewModel){
-        eventView.configure(with: event)
+        eventView?.configure(with: event)
     }
 }

@@ -8,7 +8,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     private let dataSource = Homework3DataSource()
     private var events: [Event] = []
     
-    private var eventTableView: EventTableView!  
+    private var eventTableView = EventTableView()
     
     var grouped: [String: [Event]] = [:]
     var leagueDetails: [String: League] = [:]
@@ -26,12 +26,9 @@ class ViewController: UIViewController, BaseViewProtocol {
         addViews()
         styleViews()
         setupConstraints()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         eventTableView.updateData(grouped: grouped, leagueDetails: leagueDetails)
     }
+    
 
     func addViews() {
         eventTableView = EventTableView()
@@ -60,7 +57,9 @@ class ViewController: UIViewController, BaseViewProtocol {
     func getData() {
         events = dataSource.events()
         for event in events {
-            let leagueName = event.league!.name
+            guard let league = event.league else { return  }
+            let leagueName = league.name
+
             grouped[leagueName, default: []].append(event)
             if leagueDetails[leagueName] == nil {
                 leagueDetails[leagueName] = event.league
@@ -76,7 +75,7 @@ class ViewController: UIViewController, BaseViewProtocol {
         for i in 0..<sportNames.count {
             let sportView = SportView()
             let sportViewModel = SportLogoViewModel(
-                image: UIImage(named: imageNames[i])!,
+                image: UIImage(named: imageNames[i]) ?? UIImage(),
                 sportName: sportNames[i],
                 isSelected: i==0 ? true : false
             )

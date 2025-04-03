@@ -79,57 +79,31 @@ extension EventTableView: UITableViewDelegate {
         }
 
         let leagueView = createLeagueView(for: league)
-        leagueView.backgroundColor = .white
         return leagueView
     }
     
     func configureTeamEventAtributes(event: Event) -> EventViewModel {
-        var teamViewModel1 = TeamViewModel(name: event.homeTeam.name, score: event.homeScore)
-        var teamViewModel2 = TeamViewModel(name: event.awayTeam.name, score: event.awayScore)
+        var teamViewModel1 = TeamViewModel(team: event.homeTeam, score: event.homeScore)
+        var teamViewModel2 = TeamViewModel(team: event.awayTeam, score: event.awayScore)
         
-        teamViewModel1.image = imageUrlToUIImage(imageURL: event.homeTeam.logoUrl)!
-        teamViewModel2.image = imageUrlToUIImage(imageURL: event.awayTeam.logoUrl)!
         
-        teamViewModel1 = DataMapper.teamLoadColor(team: teamViewModel1, status: event.status, otherTeamGoal: event.awayScore)
-        teamViewModel2 = DataMapper.teamLoadColor(team: teamViewModel2, status: event.status, otherTeamGoal: event.homeScore)
+        teamViewModel1.image = DataMapper.imageUrlToUIImage(imageURL: event.homeTeam.logoUrl) ?? UIImage()
+        teamViewModel2.image = DataMapper.imageUrlToUIImage(imageURL: event.awayTeam.logoUrl) ?? UIImage()
         
-        let eventViewModel = EventViewModel(
-            startTimeString: event.startTimestamp,
-            statusString: event.status,
-            homeTeam: teamViewModel1,
-            awayTeam: teamViewModel2
-        )
+        teamViewModel1 = teamViewModel1.teamLoadColor(team: teamViewModel1, status: event.status, otherTeamGoal: event.awayScore)
+        teamViewModel2 = teamViewModel2.teamLoadColor(team: teamViewModel2, status: event.status, otherTeamGoal: event.homeScore)
         
-        return configureEventAtributes(event: eventViewModel)
+        let eventViewModel = EventViewModel(event: event, homeTeam: teamViewModel1, awayTeam: teamViewModel2)
+        
+        return eventViewModel
     }
 
     private func createLeagueView(for league: League) -> LeagueView {
-        let leagueImage = imageUrlToUIImage(imageURL: league.logoUrl)
-        let leagueVM = LeagueViewModel(
-            leagueName: league.name,
-            countryName: league.country!.name,
-            image: leagueImage ?? UIImage(systemName: "photo")!
-        )
+        let leagueVM = LeagueViewModel(league: league)
         let leagueView = LeagueView()
         leagueView.configure(with: leagueVM)
+        leagueView.backgroundColor = .white
         return leagueView
     }
     
-    private func configureEventAtributes(event: EventViewModel) -> EventViewModel {
-        let returnEventViewModel = EventViewModel(
-            startTimeString: event.startTimeString,
-            statusString: event.statusString,
-            homeTeam: event.homeTeam,
-            awayTeam: event.awayTeam
-        )
-        return DataMapper.updateMinuteLabel(event: returnEventViewModel)
-    }
-
-    private func imageUrlToUIImage(imageURL: String?) -> UIImage? {
-        guard let imageURL = imageURL, let url = URL(string: imageURL) else { return nil }
-        if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-            return image
-        }
-        return nil
-    }
 }
