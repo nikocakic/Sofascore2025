@@ -4,7 +4,7 @@ import SofaAcademic
 
 class ViewController: UIViewController, BaseViewProtocol {
 
-    private var selectedSportView: SportView?
+    private var selectedSport: SelectedSport = .football
     private let dataSource = Homework3DataSource()
     private var events: [Event] = []
     
@@ -69,22 +69,24 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     private func populateSports() {
-        let sportNames = ["Football", "Basketball", "Am. Football"]
-        let imageNames = ["footballIcon", "basketballIcon", "amFootballIcon"]
+        let sports: [(SelectedSport, String)] = [
+            (.football, "footballIcon"),
+            (.basketball, "basketballIcon"),
+            (.americanFootball, "amFootballIcon")
+        ]
         
-        for i in 0..<sportNames.count {
+        for (sport, imageName) in sports {
             let sportView = SportView()
             let sportViewModel = SportLogoViewModel(
-                image: UIImage(named: imageNames[i]) ?? UIImage(),
-                sportName: sportNames[i],
-                isSelected: i==0 ? true : false
+                image: UIImage(named: imageName) ?? UIImage(),
+                sportName: sport.rawValue,
+                isSelected: sport == selectedSport
             )
-            if (i==0) {selectedSportView = sportView}
+
             sportView.configure(with: sportViewModel)
-            
             sportView.backgroundColor = .headerBlue
             sportView.isUserInteractionEnabled = true
-            
+
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sportTapped(_:)))
             sportView.addGestureRecognizer(tapGesture)
 
@@ -92,10 +94,18 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
 
+
     @objc private func sportTapped(_ sender: UITapGestureRecognizer) {
-        guard let tappedView = sender.view as? SportView else { return }
-        selectedSportView?.setSelected(false)
-        tappedView.setSelected(true)
-        selectedSportView = tappedView
+        guard let tappedView = sender.view as? SportView,
+              let sportName = tappedView.getSportName(),
+              let sport = SelectedSport(rawValue: sportName) else { return }
+
+        selectedSport = sport
+        
+        for case let sportView as SportView in sportStackView.arrangedSubviews {
+            sportView.setSelected(sportView.getSportName() == selectedSport.rawValue)
+        }
     }
+
+
 }

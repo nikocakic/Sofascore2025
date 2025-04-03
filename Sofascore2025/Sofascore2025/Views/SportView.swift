@@ -28,7 +28,6 @@ final class SportView: BaseView {
         
     }
     override func setupConstraints() {
-        //ode su mi dimenzije cudne
         homeTeamImageView.snp.makeConstraints{
             $0.size.equalTo(16)
             $0.top.equalToSuperview().inset(4)
@@ -59,9 +58,13 @@ final class SportView: BaseView {
     func configure(with sport: SportLogoViewModel){
         homeTeamImageView.image = sport.image
         sportName.text = sport.sportName
-        selectedIcon.image = .selectedIcon
+        let iconName = "selectedIcon"
+        selectedIcon.image = UIImage(named: iconName) ?? UIImage()
         isSelected = sport.isSelected
         setSelected(isSelected)
     }
-    
+    func getSportName() -> String? {
+        return sportName.text
+        }
 }
+

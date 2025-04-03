@@ -21,4 +21,10 @@ struct SportLogoViewModel {
         self.isSelected = isSelected
     }
 }
+enum SelectedSport: String {
+    case football = "Football"
+    case basketball = "Basketball"
+    case americanFootball = "Am. Football"
+}
+
 
