@@ -4,12 +4,11 @@ import SofaAcademic
 
 class ViewController: UIViewController, BaseViewProtocol {
 
-    private var selectedSport: SelectedSport = .football
+    private var selectedSport: SportType = .football
     private let dataSource = Homework3DataSource()
-    private var events: [Event] = []
     
-    private var eventTableView = EventTableView()
-    
+    private let eventTableView = EventTableView()
+
     var grouped: [String: [Event]] = [:]
     var leagueDetails: [String: League] = [:]
     
@@ -17,8 +16,6 @@ class ViewController: UIViewController, BaseViewProtocol {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        getData()
-        populateSports()
     }
     
     override func viewDidLoad() {
@@ -26,12 +23,13 @@ class ViewController: UIViewController, BaseViewProtocol {
         addViews()
         styleViews()
         setupConstraints()
+        getData()
+        populateSports()
         eventTableView.updateData(grouped: grouped, leagueDetails: leagueDetails)
     }
     
 
     func addViews() {
-        eventTableView = EventTableView()
         view.addSubview(sportStackView)
         view.addSubview(eventTableView)
     }
@@ -55,7 +53,7 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     func getData() {
-        events = dataSource.events()
+        let events: [Event] = dataSource.events()
         for event in events {
             guard let league = event.league else { return  }
             let leagueName = league.name
@@ -69,17 +67,13 @@ class ViewController: UIViewController, BaseViewProtocol {
     }
 
     private func populateSports() {
-        let sports: [(SelectedSport, String)] = [
-            (.football, "footballIcon"),
-            (.basketball, "basketballIcon"),
-            (.americanFootball, "amFootballIcon")
-        ]
+        let sports: [SportType] = [.football, .basketball, .americanFootball]
         
-        for (sport, imageName) in sports {
+        for sport in sports {
             let sportView = SportView()
             let sportViewModel = SportLogoViewModel(
-                image: UIImage(named: imageName) ?? UIImage(),
-                sportName: sport.rawValue,
+                image: sport.icon,
+                sportName: sport.name,
                 isSelected: sport == selectedSport
             )
 
@@ -94,18 +88,15 @@ class ViewController: UIViewController, BaseViewProtocol {
         }
     }
 
-
     @objc private func sportTapped(_ sender: UITapGestureRecognizer) {
-        guard let tappedView = sender.view as? SportView,
-              let sportName = tappedView.getSportName(),
-              let sport = SelectedSport(rawValue: sportName) else { return }
+        guard let tappedView = sender.view as? SportView else {return}
+        let sport = tappedView.getSport()
 
         selectedSport = sport
+
         
         for case let sportView as SportView in sportStackView.arrangedSubviews {
-            sportView.setSelected(sportView.getSportName() == selectedSport.rawValue)
-        }
+            sportView.setSelected(sportView.getSport().name == selectedSport.name)
+                }
     }
-
-
 }

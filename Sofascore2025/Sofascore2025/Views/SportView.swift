@@ -14,8 +14,9 @@ final class SportView: BaseView {
     private var homeTeamImageView = UIImageView()
     private var sportName = UILabel()
     private var selectedIcon = UIImageView()
+    private var sportEnum: SportType = .football
     
-    private var isSelected = false
+    var isSelected = false
     
     override func addViews() {
         addSubview(homeTeamImageView)
@@ -56,6 +57,7 @@ final class SportView: BaseView {
         selectedIcon.isHidden = !selected
     }
     func configure(with sport: SportLogoViewModel){
+        sportEnum = SportType(fromName: sport.sportName) ?? .football
         homeTeamImageView.image = sport.image
         sportName.text = sport.sportName
         let iconName = "selectedIcon"
@@ -63,8 +65,8 @@ final class SportView: BaseView {
         isSelected = sport.isSelected
         setSelected(isSelected)
     }
-    func getSportName() -> String? {
-        return sportName.text
+    func getSport() -> SportType {
+        return sportEnum
         }
 }
 

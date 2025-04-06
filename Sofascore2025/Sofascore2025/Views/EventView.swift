@@ -126,8 +126,8 @@ final class EventView: BaseView {
         timeLabel.text = event.time
         minuteLabel.text = event.minute
         
-        if let score = event.homeTeam.score { numHomeTeamGoalsLabel.text = String(score)} else { numHomeTeamGoalsLabel.text = ""}
-        if let score = event.awayTeam.score { numAwayTeamGoalsLabel.text = String(score)} else { numAwayTeamGoalsLabel.text = ""}
+        numHomeTeamGoalsLabel.text = event.homeTeam.score?.description ?? ""
+        numAwayTeamGoalsLabel.text = event.awayTeam.score?.description ?? ""
 
         homeTeamLabel.textColor = event.homeTeam.teamColor
         awayTeamLabel.textColor = event.awayTeam.teamColor

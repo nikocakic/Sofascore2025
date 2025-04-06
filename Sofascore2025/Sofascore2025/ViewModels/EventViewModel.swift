@@ -19,7 +19,17 @@ struct EventViewModel {
     var minute: String = ""
     var minuteColor: UIColor = .semiTransparentDark
     
-    init (event: Event, homeTeam: TeamViewModel, awayTeam: TeamViewModel){
+    init (event: Event){
+        var homeTeam = TeamViewModel(team: event.homeTeam, score: event.homeScore)
+        var awayTeam = TeamViewModel(team: event.awayTeam, score: event.awayScore)
+        
+        
+        homeTeam.image = DataMapper.imageUrlToUIImage(imageURL: event.homeTeam.logoUrl) ?? UIImage()
+        awayTeam.image = DataMapper.imageUrlToUIImage(imageURL: event.awayTeam.logoUrl) ?? UIImage()
+        
+        homeTeam = homeTeam.teamLoadColor(team: homeTeam, status: event.status, otherTeamGoal: event.awayScore)
+        awayTeam = awayTeam.teamLoadColor(team: awayTeam, status: event.status, otherTeamGoal: event.homeScore)
+        
         self.startTimeString = event.startTimestamp
         self.statusString = event.status
         self.homeTeam = homeTeam

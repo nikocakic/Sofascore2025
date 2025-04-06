@@ -44,6 +44,14 @@ class EventTableView: UIView {
         self.leagueDetails = leagueDetails
         tableView.reloadData()
     }
+    
+    private func createLeagueView(for league: League) -> LeagueView {
+        let leagueVM = LeagueViewModel(league: league)
+        let leagueView = LeagueView()
+        leagueView.configure(with: leagueVM)
+        leagueView.backgroundColor = .white
+        return leagueView
+    }
 }
 
 extension EventTableView: UITableViewDataSource {
@@ -65,7 +73,7 @@ extension EventTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let eventViewModel = configureTeamEventAtributes(event: eventData)
+        let eventViewModel = EventViewModel(event: eventData)
         cell.set(event: eventViewModel)
         return cell
     }
@@ -81,29 +89,4 @@ extension EventTableView: UITableViewDelegate {
         let leagueView = createLeagueView(for: league)
         return leagueView
     }
-    
-    func configureTeamEventAtributes(event: Event) -> EventViewModel {
-        var teamViewModel1 = TeamViewModel(team: event.homeTeam, score: event.homeScore)
-        var teamViewModel2 = TeamViewModel(team: event.awayTeam, score: event.awayScore)
-        
-        
-        teamViewModel1.image = DataMapper.imageUrlToUIImage(imageURL: event.homeTeam.logoUrl) ?? UIImage()
-        teamViewModel2.image = DataMapper.imageUrlToUIImage(imageURL: event.awayTeam.logoUrl) ?? UIImage()
-        
-        teamViewModel1 = teamViewModel1.teamLoadColor(team: teamViewModel1, status: event.status, otherTeamGoal: event.awayScore)
-        teamViewModel2 = teamViewModel2.teamLoadColor(team: teamViewModel2, status: event.status, otherTeamGoal: event.homeScore)
-        
-        let eventViewModel = EventViewModel(event: event, homeTeam: teamViewModel1, awayTeam: teamViewModel2)
-        
-        return eventViewModel
-    }
-
-    private func createLeagueView(for league: League) -> LeagueView {
-        let leagueVM = LeagueViewModel(league: league)
-        let leagueView = LeagueView()
-        leagueView.configure(with: leagueVM)
-        leagueView.backgroundColor = .white
-        return leagueView
-    }
-    
 }
