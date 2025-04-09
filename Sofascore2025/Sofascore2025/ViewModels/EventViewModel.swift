@@ -10,56 +10,55 @@ import UIKit
 import SofaAcademic
 
 struct EventViewModel {
-    var startTimeString: Int = 0
-    var statusString: EventStatus = .notStarted
+    var startTimeString: Int
+    var statusString: EventStatus
     var homeTeam: TeamViewModel
     var awayTeam: TeamViewModel
     
-    var time: String = ""
-    var minute: String = ""
-    var minuteColor: UIColor = .semiTransparentDark
+    var time: String
+    var minute: String
+    var minuteColor: UIColor
     
     init (event: Event){
-        var homeTeam = TeamViewModel(team: event.homeTeam, score: event.homeScore)
-        var awayTeam = TeamViewModel(team: event.awayTeam, score: event.awayScore)
-        
-        
-        homeTeam.image = DataMapper.imageUrlToUIImage(imageURL: event.homeTeam.logoUrl) ?? UIImage()
-        awayTeam.image = DataMapper.imageUrlToUIImage(imageURL: event.awayTeam.logoUrl) ?? UIImage()
-        
-        homeTeam = homeTeam.teamLoadColor(team: homeTeam, status: event.status, otherTeamGoal: event.awayScore)
-        awayTeam = awayTeam.teamLoadColor(team: awayTeam, status: event.status, otherTeamGoal: event.homeScore)
+        self.homeTeam = TeamViewModel(team: event.homeTeam, score: event.homeScore, status: event.status, otherTeamGoal: event.awayScore)
+        self.awayTeam = TeamViewModel(team: event.awayTeam, score: event.awayScore, status: event.status, otherTeamGoal: event.homeScore)
         
         self.startTimeString = event.startTimestamp
         self.statusString = event.status
-        self.homeTeam = homeTeam
-        self.awayTeam = awayTeam
-        self = self.updateMinuteLabel(event: self)
+        
+        let result = Self.updateMinuteLabel(event: event)
+        self.time = result.time
+        self.minute = result.minute
+        self.minuteColor = result.minuteColor
     }
     
-    func updateMinuteLabel(event: EventViewModel) -> EventViewModel {
-        var modifiedEvent = event
-        let date = Date(timeIntervalSince1970: TimeInterval(modifiedEvent.startTimeString))
+    static func updateMinuteLabel(event: Event) -> (time: String, minute: String, minuteColor: UIColor) {
+        let date = Date(timeIntervalSince1970: TimeInterval(event.startTimestamp))
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        modifiedEvent.time = dateFormatter.string(from: date)
+        let time = dateFormatter.string(from: date)
 
         let calendar = Calendar.current
-        let minute = calendar.component(.minute, from: date)
+        let minuteValue = calendar.component(.minute, from: date)
 
-        switch modifiedEvent.statusString {
+        var minute = "-"
+        var minuteColor: UIColor = .semiTransparentDark
+
+        switch event.status {
         case .notStarted:
-            modifiedEvent.minute = "-"
+            minute = "-"
         case .inProgress:
-            modifiedEvent.minute  = "\(minute)'"
-            modifiedEvent.minuteColor = .red
+            minute = "\(minuteValue)'"
+            minuteColor = .red
         case .finished:
-            modifiedEvent.minute  = "FT"
+            minute = "FT"
         case .halftime:
-            modifiedEvent.minute  = "HT"
+            minute = "HT"
         }
-        return modifiedEvent
+
+        return (time, minute, minuteColor)
     }
-    
+
 }
 

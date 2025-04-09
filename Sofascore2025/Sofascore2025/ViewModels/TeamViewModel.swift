@@ -10,34 +10,46 @@ import UIKit
 import SofaAcademic
 
 struct TeamViewModel {
-    var image: UIImage = UIImage(systemName: "photo")!
-    var name: String = "Unknown"
-    var score: Int? = nil
-    var goalsColor: UIColor? = .black
-    var teamColor: UIColor? = .black
+    var image: UIImage?
+    var name: String
+    var score: Int?
+    var goalsColor: UIColor?
+    var teamColor: UIColor?
     
-    init(team: Team, score: Int?) {
+    init(team: Team, score: Int?, status: EventStatus, otherTeamGoal: Int?) {
         self.image = DataMapper.imageUrlToUIImage(imageURL: team.logoUrl) ?? UIImage()
         self.name = team.name
-        if let score = score {
+        if let score = score,
+           let otherTeamGoal=otherTeamGoal{
+            
             self.score = score
+            let colors = teamLoadColor(team: team, score: score, status: status, otherTeamGoal: otherTeamGoal)
+            
+            self.teamColor = colors.teamColor
+            self.goalsColor = colors.goalsColor
         }
+        
+        self.image = DataMapper.imageUrlToUIImage(imageURL: team.logoUrl) ?? UIImage()
+        
 
     }
     
-    func teamLoadColor(team: TeamViewModel, status: EventStatus, otherTeamGoal: Int?) -> TeamViewModel{
-        var modifiedTeam = team
+    func teamLoadColor(team: Team, score: Int?, status: EventStatus, otherTeamGoal: Int?) -> (teamColor: UIColor, goalsColor: UIColor) {
+        var teamColor: UIColor = .black
+        var goalsColor: UIColor = .black
 
-        if status == .finished || status == .inProgress {
-            if status == .inProgress {
-                modifiedTeam.goalsColor = .red
-            }
-
-            if let teamScore = modifiedTeam.score, let opponentScore = otherTeamGoal,
-               teamScore < opponentScore, status == .finished {
-                modifiedTeam.teamColor = .semiTransparentDark
-            }
+        if status == .inProgress {
+            goalsColor = .red
         }
-        return modifiedTeam
+
+        if status == .finished,
+           let teamScore = score,
+           let opponentScore = otherTeamGoal,
+           teamScore < opponentScore {
+            teamColor = .semiTransparentDark
+            goalsColor = .semiTransparentDark
+        }
+
+        return (teamColor, goalsColor)
     }
 }

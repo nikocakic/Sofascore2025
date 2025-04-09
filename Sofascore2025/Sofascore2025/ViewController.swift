@@ -4,7 +4,7 @@ import SofaAcademic
 
 class ViewController: UIViewController, BaseViewProtocol {
 
-    private var selectedSport: SportType = .football
+    private var selectedSport: SportType
     private let dataSource = Homework3DataSource()
     
     private let eventTableView = EventTableView()
@@ -13,9 +13,12 @@ class ViewController: UIViewController, BaseViewProtocol {
     var leagueDetails: [String: League] = [:]
     
     private var sportStackView = UIStackView()
+    private var tapGesture = SportTapGestureRecognizer()
 
     required init?(coder: NSCoder) {
+        self.selectedSport = .football
         super.init(coder: coder)
+        
     }
     
     override func viewDidLoad() {
@@ -51,6 +54,7 @@ class ViewController: UIViewController, BaseViewProtocol {
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
 
     func getData() {
         let events: [Event] = dataSource.events()
@@ -72,31 +76,37 @@ class ViewController: UIViewController, BaseViewProtocol {
         for sport in sports {
             let sportView = SportView()
             let sportViewModel = SportLogoViewModel(
-                image: sport.icon,
-                sportName: sport.name,
-                isSelected: sport == selectedSport
+                isSelected: sport == selectedSport,
+                sportEnum: sport
             )
 
+            
             sportView.configure(with: sportViewModel)
             sportView.backgroundColor = .headerBlue
             sportView.isUserInteractionEnabled = true
 
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sportTapped(_:)))
+            let tapGesture = SportTapGestureRecognizer(target: self, action: #selector(sportTapped(_:)))
+            tapGesture.sportType = sport
             sportView.addGestureRecognizer(tapGesture)
 
             sportStackView.addArrangedSubview(sportView)
         }
     }
 
-    @objc private func sportTapped(_ sender: UITapGestureRecognizer) {
-        guard let tappedView = sender.view as? SportView else {return}
-        let sport = tappedView.getSport()
+    @objc private func sportTapped(_ sender: SportTapGestureRecognizer) {
+            guard let sport = sender.sportType else { return }
+            selectedSport = sport
 
-        selectedSport = sport
+            
+            for case let sportView as SportView in sportStackView.arrangedSubviews {
+                sportView.setSelected(sportView.sportEnum == selectedSport)
+                    }
+        }
 
-        
-        for case let sportView as SportView in sportStackView.arrangedSubviews {
-            sportView.setSelected(sportView.getSport().name == selectedSport.name)
-                }
-    }
 }
+
+class SportTapGestureRecognizer: UITapGestureRecognizer {
+    var sportType: SportType?
+}
+
+

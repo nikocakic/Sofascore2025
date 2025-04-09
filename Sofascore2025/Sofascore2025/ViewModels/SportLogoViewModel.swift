@@ -11,14 +11,12 @@ import SofaAcademic
 
 
 struct SportLogoViewModel {
-    var image: UIImage = UIImage(systemName: "photo")!
-    var sportName: String
     var isSelected: Bool
+    var sportEnum: SportType
     
-    init(image: UIImage, sportName: String, isSelected: Bool) {
-        self.image = image
-        self.sportName = sportName
+    init(isSelected: Bool, sportEnum: SportType) {
         self.isSelected = isSelected
+        self.sportEnum = sportEnum
     }
 }
 import UIKit

@@ -11,15 +11,15 @@ import SofaAcademic
 
 final class SportView: BaseView {
     
-    private var homeTeamImageView = UIImageView()
+    private var imageView = UIImageView()
     private var sportName = UILabel()
     private var selectedIcon = UIImageView()
-    private var sportEnum: SportType = .football
     
-    var isSelected = false
-    
+    var sportEnum: SportType?
+    var isSelected: Bool?
+
     override func addViews() {
-        addSubview(homeTeamImageView)
+        addSubview(imageView)
         addSubview(sportName)
         addSubview(selectedIcon)
     }
@@ -29,7 +29,7 @@ final class SportView: BaseView {
         
     }
     override func setupConstraints() {
-        homeTeamImageView.snp.makeConstraints{
+        imageView.snp.makeConstraints{
             $0.size.equalTo(16)
             $0.top.equalToSuperview().inset(4)
             $0.centerX.equalToSuperview()
@@ -37,7 +37,7 @@ final class SportView: BaseView {
         }
         
         sportName.snp.makeConstraints(){
-            $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
+            $0.top.equalTo(imageView.snp.bottom).offset(4)
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview().inset(8)
         }
@@ -57,16 +57,14 @@ final class SportView: BaseView {
         selectedIcon.isHidden = !selected
     }
     func configure(with sport: SportLogoViewModel){
-        sportEnum = SportType(fromName: sport.sportName) ?? .football
-        homeTeamImageView.image = sport.image
-        sportName.text = sport.sportName
+        sportEnum = sport.sportEnum
+        imageView.image = sport.sportEnum.icon
+        sportName.text = sport.sportEnum.name
         let iconName = "selectedIcon"
         selectedIcon.image = UIImage(named: iconName) ?? UIImage()
         isSelected = sport.isSelected
-        setSelected(isSelected)
+        setSelected(isSelected ?? false)
     }
-    func getSport() -> SportType {
-        return sportEnum
-        }
+    
 }
 
