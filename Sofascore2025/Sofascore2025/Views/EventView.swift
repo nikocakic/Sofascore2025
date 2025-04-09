@@ -126,12 +126,9 @@ final class EventView: BaseView {
         timeLabel.text = event.time
         minuteLabel.text = event.minute
         
-        numHomeTeamGoalsLabel.text = event.homeTeam.score != nil ? String(event.homeTeam.score!) : ""
+        numHomeTeamGoalsLabel.text = event.homeTeam.score?.description ?? ""
+        numAwayTeamGoalsLabel.text = event.awayTeam.score?.description ?? ""
 
-        numAwayTeamGoalsLabel.text = event.awayTeam.score != nil ? String(event.awayTeam.score!) : ""
-
-
-        
         homeTeamLabel.textColor = event.homeTeam.teamColor
         awayTeamLabel.textColor = event.awayTeam.teamColor
         
